@@ -116,8 +116,8 @@ if ! shopt -oq posix; then
   fi
 fi
 
-GOPATH=$(go env GOPATH)
-export PATH=$PATH:/opt/go/bin:$GOPATH/bin:~/minio
+export PATH="${PATH}:$(go env GOPATH)/bin"
+export LD_LIBRARY_PATH="$(go env GOPATH)/deps/dqlite/.libs/:${LD_LIBRARY_PATH}"
 
 export LXD_SHIFTFS_DISABLE=true
 export CGO_CFLAGS="-I${GOPATH}/deps/dqlite/include/"
