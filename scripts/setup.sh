@@ -1,7 +1,8 @@
 #!/bin/bash
 
 # git clone
-mkdir ~/canonical;cd ~/canonical
+mkdir ~/canonical
+cd ~/canonical
 git clone https://github.com/kadinsayani/lxd && git clone https://github.com/kadinsayani/lxd-ci
 
 # bashrc
@@ -18,7 +19,7 @@ sudo apt install lvm2 thin-provisioning-tools
 sudo apt install btrfs-progs
 sudo apt install busybox-static curl gettext jq sqlite3 socat bind9-dnsutils
 # utils
-sudo apt install neovim
+sudo snap install neovim --classic
 
 # lxd setup
 echo "root:1000000:1000000000" | sudo tee -a /etc/subuid /etc/subgid
