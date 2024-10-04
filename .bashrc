@@ -131,12 +131,12 @@ alias lxdstart='sudo --preserve-env=PATH,GORACE,LXD_SHIFTFS_DISABLE $GOPATH/bin/
 alias lxdtest='sudo --preserve-env=PATH,GOPATH,GORACE,LXD_INSPECT,LXD_DEBUG,LXD_VERBOSE,LXD_BACKEND,LXD_NIC_BRIDGED_DRIVER,LXD_CEPH_CLUSTER,LXD_CEPH_CEPHOBJECT_RADOSGW,LXD_CONCURRENT,LXD_SKIP_TESTS,LXD_REQUIRED_TESTS,LXD_SHIFTFS_DISABLE LXD_TMPFS=1 LXD_VERBOSE=1 LXD_NIC_SRIOV_PARENT= LXD_TEST_IMAGE= ./main.sh'
 alias lxdgotest='sudo --preserve-env=GOPATH,CGO_CFLAGS,CGO_LDFLAGS_ALLOW,CGO_LDFLAGS,LD_RUN_PATH,PATH go test ./...'
 alias sllxd='../../utils/scripts/sideload.sh'
-alias gc='git commit -s -m'
+alias gc='f() { git commit -s -m "$1"; }; f'
 alias gcapache='git commit --amend -s --trailer License:Apache-2.0'
-alias gcp='git cherry-pick -x'
+alias gcp='f() { git cherry-pick -x "$1"; }; f'
 alias gadd='git add .'
 alias gca='git commit --amend'
-alias grebase='git rebase -i'
+alias grebase='f() { git rebase -i "$1"; }; f'
 alias gpushforce='git push --force-with-lease --no-verify'
 
 export EDITOR=vi
