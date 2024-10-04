@@ -9,5 +9,7 @@ sudo mount --bind /home/kadinsayani/go/bin/lxd-agent /snap/lxd/current/bin/lxd-a
 sudo systemctl reload snap.lxd.daemon
 sudo snap set lxd daemon.debug=true
 sudo systemctl reload snap.lxd.daemon
+sudo lxd init --auto --storage-backend zfs
+tmux new-session -d -s lxc-monitor 'lxc monitor --pretty'
 
 # logs in /var/snap/lxd/common/lxd/logs/lxd.log
