@@ -138,6 +138,7 @@ alias gadd='git add .'
 alias gca='git commit --amend'
 alias grebase='f() { git rebase -i "$1"; }; f'
 alias gpushforce='git push --force-with-lease --no-verify'
+alias gpush='git push'
 
 export EDITOR=vi
 export VISUAL=$EDITOR
