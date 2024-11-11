@@ -1,0 +1,110 @@
+#cloud-config
+
+hostname: devbox
+timezone: America/Denver
+
+packages:
+  - acl
+  - attr
+  - autoconf
+  - automake
+  - dnsmasq-base
+  - git
+  - libacl1-dev
+  - libcap-dev
+  - liblxc1
+  - liblxc-dev
+  - libsqlite3-dev
+  - libtool
+  - libudev-dev
+  - liblz4-dev
+  - libuv1-dev
+  - make
+  - pkg-config
+  - rsync
+  - squashfs-tools
+  - tar
+  - tcl
+  - xz-utils
+  - ebtables
+  - lvm2
+  - thin-provisioning-tools
+  - btrfs-progs
+  - busybox-static
+  - curl
+  - gettext
+  - jq
+  - sqlite3
+  - socat
+  - snapd
+  - bind9-dnsutils
+  - qemu-system-x86
+  - nfs-kernel-server
+  - python3-venv
+  - shellcheck
+  - flake8
+  - python3-pip
+
+package-update: true
+package-upgrade: true
+
+groups:
+  - kadin
+  - adm
+  - systemd-journal
+  - netdev
+  - lxd
+  - landscape
+  - ceph
+  - libvirt
+  - microk8s
+
+users:
+  - default
+  - name: kadinsayani
+    gecos: Kadin Sayani
+    primary_group: kadin
+    groups:
+      - lxd
+      - microk8s
+      - adm
+      - systemd-journal
+    lock_passwd: true
+    shell: /bin/bash
+    sudo: "ALL=(ALL) NOPASSWD:ALL"
+    uid: "1000"
+    ssh_import_id:
+      - lp:kadinsayani
+      - gh:kadinsayani
+
+ssh_authorized_keys:
+  - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEu+RmEYG8tthh/JeWu/5Ch/0qU+HIxMFQUXWRvBehlM kadin.sayani@canonical.com
+
+snaps:
+  - name: go
+    classic: true
+
+write_files:
+  - content: |
+     #!/bin/bash
+      mkdir -p ~/canonical
+      git -C ~/canonical clone https://github.com/kadinsayani/lxd.git
+      git -C ~/canonical/lxd remote rm origin
+      git -C ~/canonical/lxd remote add origin git@github.com:kadinsayani/lxd.git
+      git config --global gpg.format ssh
+      git config --global user.email 'kadin.sayani@canonical.com'
+      git config --global user.name 'Kadin Sayani'
+      git config --global user.signingkey ~/.ssh/id_ed25519.pub
+    path: /home/kadinsayani/setup.sh
+    permissions: "0755"
+  - content: |
+      root:1000000:1000000000
+    path: /etc/subuid
+    append: true
+  - content: |
+      root:1000000:1000000000
+    path: /etc/subgid
+    append: true
+
+runcmd:
+  - ["su", "kadinsayani", "-c", "/home/kadinsayani/setup.sh"]
