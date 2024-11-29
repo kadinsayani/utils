@@ -1,7 +1,7 @@
-cd ~/canonical/lxd;make
+cd ~/canonical/lxd; make; cd ~
 sudo snap remove --purge lxd
 sudo snap remove --purge lxd-installer
-sudo snap install lxd --channel=latest/edge
+sudo snap install lxd --channel=5.21/stable
 
 sudo mv ~/go/bin/lxd /var/snap/lxd/common/lxd.debug
 sudo mv ~/go/bin/lxc /var/snap/lxd/common/lxc.debug

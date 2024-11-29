@@ -42,7 +42,7 @@ config:
     - rsync
     - squashfs-tools
   limits.cpu: "4"
-  limits.memory: 16GiB
+  limits.memory: 6GiB
   security.devlxd.images: "true"
 devices:
   eth0:
@@ -64,6 +64,6 @@ devices:
   root:
     path: /
     pool: default
-    size: 40GiB
+    size: 50GiB
     type: disk
 used_by: []

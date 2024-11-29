@@ -8,16 +8,14 @@ lxc storage volume create disks local1 --type block
 lxc storage volume create disks local2 --type block
 lxc storage volume create disks local3 --type block
 
-lxc storage volume create disks remote1 --type block size=20GiB
-lxc storage volume create disks remote2 --type block size=20GiB
-lxc storage volume create disks remote3 --type block size=20GiB
-
-lxc storage volume create disks local4 --type block
+lxc storage volume create disks remote1 --type block size=10GiB
+lxc storage volume create disks remote2 --type block size=10GiB
+lxc storage volume create disks remote3 --type block size=10GiB
 
 # Init nodes
-lxc init ubuntu:24.04 micro1 --vm --config limits.cpu=2 --config limits.memory=2GiB
-lxc init ubuntu:24.04 micro2 --vm --config limits.cpu=2 --config limits.memory=2GiB
-lxc init ubuntu:24.04 micro3 --vm --config limits.cpu=2 --config limits.memory=2GiB
+lxc init ubuntu:24.04 micro1 --vm --config limits.cpu=1 --config limits.memory=1GiB
+lxc init ubuntu:24.04 micro2 --vm --config limits.cpu=1 --config limits.memory=1GiB
+lxc init ubuntu:24.04 micro3 --vm --config limits.cpu=1 --config limits.memory=1GiB
 
 # Attach disks
 lxc storage volume attach disks local1 micro1
@@ -66,13 +64,19 @@ lxc exec micro1 -- sh -c "netplan apply"
 lxc exec micro2 -- sh -c "netplan apply"
 lxc exec micro3 -- sh -c "netplan apply"
 
+sleep 15
+
+lxc file push ~/go/bin/lxd ~/go/bin/lxc ~/go/bin/lxd-agent micro1/root/
+lxc file push ~/go/bin/lxd ~/go/bin/lxc ~/go/bin/lxd-agent micro2/root/
+lxc file push ~/go/bin/lxd ~/go/bin/lxc ~/go/bin/lxd-agent micro3/root/
+
 install_snaps() {
     local machine=$1
 
-    lxc exec "${machine}" -- sh -c 'snap install microceph --channel=latest/edge --cohort="+"'
-    lxc exec "${machine}" -- sh -c 'snap install microcloud --channel=latest/edge --cohort="+"'
-    lxc exec "${machine}" -- sh -c 'snap install microovn --channel=latest/edge --cohort="+"'
-    lxc exec "${machine}" -- sh -c 'snap install lxd --channel=latest/edge --cohort="+"'
+    lxc exec "${machine}" -- sh -c 'snap install microceph --channel=squid/stable --cohort="+"'
+    lxc exec "${machine}" -- sh -c 'snap install microcloud --channel=2/stable --cohort="+"'
+    lxc exec "${machine}" -- sh -c 'snap install microovn --channel=24.03/stable --cohort="+"'
+    lxc exec "${machine}" -- sh -c 'snap install lxd --channel=5.21/stable --cohort="+"'
 }
 
 # Run the installations in parallel for each machine
