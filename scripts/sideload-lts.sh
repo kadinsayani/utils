@@ -1,4 +1,3 @@
-cd ~/canonical/lxd; make; cd ~
 sudo snap remove --purge lxd
 sudo snap remove --purge lxd-installer
 sudo snap install lxd --channel=5.21/stable

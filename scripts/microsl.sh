@@ -11,5 +11,6 @@ sideload_lxd() {
 sideload_lxd micro1 &
 sideload_lxd micro2 &
 sideload_lxd micro3 &
+sideload_lxd micro4 &
 
 wait

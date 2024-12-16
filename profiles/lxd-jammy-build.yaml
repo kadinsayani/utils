@@ -1,1 +1,56 @@
+name: lxd-jammy-build
+description: "LXD build environment on Jammy"
+config:
+  cloud-init.user-data: |-
+    #cloud-config
+    ssh_import_id: [lp:kadinsayani]
+    apt:
+      disable_suites:
+        - backports
+        - security
+      conf: |
+        Acquire::Languages "none";
+        APT::Get::Show-Versions "true";
 
+    write_files:
+      - content: "force-unsafe-io\n"
+        path: /etc/dpkg/dpkg.cfg
+        append: true
+
+    runcmd:
+      - echo "PURGE_LXD=1" >> /etc/environment
+      - systemctl stop unattended-upgrades.service
+      - apt-get autopurge -y cron needrestart networkd-dispatcher unattended-upgrades
+      - cd /etc/systemd/system/timers.target.wants/ && systemctl disable --now *.timer
+      - apt update
+      - apt install -y acl attr autoconf automake bind9-dnsutils busybox-static curl dnsmasq-base ebtables gettext git gpg jq libacl1-dev libcap-dev liblxc1 liblxc-dev libsqlite3-dev libtool libudev-dev liblz4-dev libuv1-dev lvm2 make pkg-config qemu-utils rsync socat squashfs-tools tar tcl thin-provisioning-tools xz-utils
+      - command -v snap >/dev/null || apt install -y snapd
+      - snap install --classic go
+      - cd /root/lxd && make deps
+      - |
+        cat <<EOF >> /root/.bashrc
+        export CGO_CFLAGS="-I$(go env GOPATH)/deps/dqlite/include/"
+        export CGO_LDFLAGS="-L$(go env GOPATH)/deps/dqlite/.libs/"
+        export LD_LIBRARY_PATH="$(go env GOPATH)/deps/dqlite/.libs/${LD_LIBRARY_PATH}"
+        export CGO_LDFLAGS_ALLOW="(-Wl,-wrap,pthread_create)|(-Wl,-z,now)"
+        EOF
+      - source /root/.bashrc && make
+
+    package_update: true
+    package_upgrade: true
+  limits.cpu: "2"
+  limits.memory: 4GiB
+  security.devlxd.images: "true"
+devices:
+  eth0:
+    name: eth0
+    network: lxdbr0
+    type: nic
+  lxd:
+    path: /root/lxd
+    source: /home/kadinsayani/canonical/lxd
+    type: disk
+  root:
+    path: /
+    type: disk
+    pool: default
