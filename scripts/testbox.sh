@@ -1,6 +1,8 @@
-lxc launch ubuntu:n $1 --vm -c limits.cpu=2 -c limits.memory=2GiB -d root,size=50GiB
+cd ~/canonical/lxd && make
+lxc launch ubuntu:n $1
+# lxc launch ubuntu:n $1 --vm -c limits.cpu=2 -c limits.memory=2GiB -d root,size=50GiB
  
-sleep 20
+# sleep 20
 lxc file push ~/go/bin/lxd ~/go/bin/lxc ~/go/bin/lxd-agent $1/root/
 
 lxc exec $1 -- sudo snap remove --purge lxd
