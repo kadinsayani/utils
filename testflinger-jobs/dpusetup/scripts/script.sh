@@ -65,17 +65,11 @@ sudo mst start
 sudo mst status -v
 
 # Install the Ubuntu BFB image
-echo "nameserver 8.8.8.8" | sudo tee /etc/resolv.conf > /dev/null
-sudo apt update
 sudo apt-get -y install pv
 bfb-install --bfb bf-bundle-2.9.1-30_24.11_ubuntu-22.04_prod.bfb --rshim rshim0
 
 # Verify installation
 sudo cat /dev/rshim0/misc
-
-sudo apt install snapd
-sudo apt install iperf3
-sudo snap install go --classic
 
 # Upgrade the DPU firmware
 # sudo ip addr add 192.168.100.1/24 dev tmfifo_net0

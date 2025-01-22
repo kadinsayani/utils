@@ -1,0 +1,13 @@
+job_queue: amontons
+# provision_data:
+test_data:
+  attachments:
+    - local: "scripts/script.sh"
+      agent: "script.sh"
+  test_cmds: |
+    chmod u+x attachments/test/script.sh
+    attachments/test/script.sh
+reserve_data:
+  ssh_keys:
+    - lp:kadinsayani
+  timeout: 21600
