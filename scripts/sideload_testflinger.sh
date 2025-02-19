@@ -1,6 +1,9 @@
 # logs in /var/snap/lxd/common/lxd/logs/lxd.log
 
-cd /home/kadinsayani/canonical/lxd; make; cd /home/kadinsayani
+cd /home/kadinsayani/canonical/lxd
+make
+cd /home/kadinsayani
+ssh -o 'StrictHostKeyChecking=no' -o 'UserKnownHostsFile=/dev/null' 'ubuntu@10.241.0.33'
 ssh $1 sudo snap remove --purge lxd
 ssh $1 sudo snap remove --purge lxd-installer
 ssh $1 sudo snap install lxd --channel=latest/edge
